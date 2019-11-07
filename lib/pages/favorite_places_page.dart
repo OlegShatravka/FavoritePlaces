@@ -1,6 +1,6 @@
 import 'package:favorite_places/models/favorite_place.dart';
 import 'package:favorite_places/pages/create_place_page.dart';
-import 'package:favorite_places/widgets/place_tile.dart';
+import 'package:favorite_places/widgets/favorite_places_list.dart';
 import 'package:flutter/material.dart';
 
 class FavoritePlacesPage extends StatefulWidget {
@@ -13,15 +13,13 @@ class FavoritePlacesPage extends StatefulWidget {
 class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
   final places = <FavoritePlace>[];
 
-  Future _showCreatePlace(BuildContext context) async {
+  Future _showCreatePlacePage(BuildContext context) async {
     final place = await Navigator.push(
         context,
         MaterialPageRoute<FavoritePlace>(
             builder: (context) => CreatePlacePage()));
     if (place != null) {
-      setState(() {
-        places.add(place);
-      });
+      setState(() => places.add(place));
     }
   }
 
@@ -32,20 +30,11 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
       appBar: AppBar(
         title: const Text('Favorite places'),
       ),
-      body: places.isEmpty
-          ? Center(
-              child: const Text('Press + button to add a new place.'),
-            )
-          : ListView.builder(
-              itemCount: places.length,
-              itemBuilder: (context, index) {
-                return PlaceTile(place: places[index]);
-              },
-            ),
+      body: FavoritePlacesList(places: places,),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          _showCreatePlace(context);
+          _showCreatePlacePage(context);
         },
       ),
     );

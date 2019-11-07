@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:favorite_places/models/favorite_place.dart';
+import 'package:favorite_places/widgets/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -15,19 +16,13 @@ class _CreatePlacePageState extends State<CreatePlacePage> {
 
   Future _getPhoto() async {
     final image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _photo = image;
-    });
+    setState(() => _photo = image);
   }
 
   Future _takePhoto() async {
     final image = await ImagePicker.pickImage(source: ImageSource.camera);
-    setState(() {
-      _photo = image;
-    });
+    setState(() => _photo = image);
   }
-
-
 
   void _save(BuildContext context) {
     if (_photo == null || _placeDescription.isEmpty || _placeName.isEmpty) {
@@ -60,57 +55,30 @@ class _CreatePlacePageState extends State<CreatePlacePage> {
                   children: [
                     if (_photo != null) Image.file(_photo),
                     Row(
-                      // mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         RaisedButton(
                           child: const Text('Take picture'),
-                          onPressed: () {
-                            _takePhoto();
-                          },
+                          onPressed: ()  => _takePhoto(),
                         ),
                         RaisedButton(
                           child: const Text('Take from gallery'),
-                          onPressed: () {
-                            _getPhoto();
-                          },
+                          onPressed: () => _getPhoto(),
                         ),
                       ],
                     ),
-                    TextField(
-                      decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.all(20.0),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context).accentColor,
-                            ),
-                          ),
-                          labelText: 'Enter picture name'),
-                      onChanged: (text) {
-                        _placeName = text;
-                      },
-                    ),
+                    InputField(
+                        placeHolder: 'Enter picture name',
+                        onPressed: (String text) => _placeName = text),
                     const SizedBox(
                       height: 5,
                     ),
-                    TextField(
-                      decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.all(20.0),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context).accentColor,
-                            ),
-                          ),
-                          labelText: 'Enter description'),
-                      onChanged: (text) {
-                        _placeDescription = text;
-                      },
-                    ),
+                    InputField(
+                        placeHolder: 'Enter description',
+                        onPressed: (String text) => _placeDescription = text),
                     RaisedButton(
                       child: const Text('Create'),
-                      onPressed: () {
-                        _save(context);
-                      },
+                      onPressed: ()  => _save(context),
                     ),
                   ],
                 ),
